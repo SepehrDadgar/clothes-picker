@@ -2,12 +2,17 @@ from fileinput import filename
 from flask import Flask, render_template, redirect, request, url_for
 from flask_bootstrap import Bootstrap
 from forms import ChooseType, tshirtForm
+from PIL import Image, ImageDraw, ImageFont
+
+
 
 
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = """xqWubp'd^T=8bvD'"""
+from flask_share import Share
+share = Share(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Bootstrap(app)
@@ -61,17 +66,21 @@ def result():
     #     return tshirt_dict.get(value)
 
     if type=="آستین کوتاه"and neck_type=="یقه حلقه":
-        path = url_for('static',filename='/img/t-u-sh.jpg')
+        path = url_for('static',filename='img/t-u-sh.jpg')
     elif type=="آستین بلند"and neck_type=="یقه حلقه":
-        path = url_for('static',filename='/img/t-u-l.jpg')
+        path = url_for('static',filename='img/t-u-l.jpg')
     elif type=="آستین کوتاه"and neck_type=="یقه وی":
-        path = url_for('static',filename='/img/t-v-sh.jpg')
+        path = url_for('static',filename='img/t-v-sh.jpg')
     elif type=="آستین بلند"and neck_type=="یقه وی":
-        path = url_for('static',filename='/img/t-v-l.jpg')
+        path = url_for('static',filename='img/t-v-l.jpg')
     
 
-    img_url = path
+    img = Image.open(f".{path}")
+    d = ImageDraw.Draw(img)
+    fnt = ImageFont.truetype('comicbd.ttf', 13)
+    d.text((153,49), dore_sine , font=fnt, fill=(0,0,255))
+    d.text((153,142), size_kamar , font=fnt, fill=(0,225,0))
+    img.save('static/img/temp.png')
+    image = url_for('static',filename='img/temp.png')
 
-
-
-    return render_template('result.html',dore_sine=dore_sine,size_kamar=size_kamar,neck_type=neck_type,type=type,img=img_url)
+    return render_template('result.html',dore_sine=dore_sine,size_kamar=size_kamar,neck_type=neck_type,type=type, image=image)

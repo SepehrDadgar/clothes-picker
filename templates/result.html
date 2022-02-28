@@ -4,4 +4,11 @@
 {{ size_kamar}} <br>
 {{dore_sine}} <br>
 
-<img src="{{ img }}" alt="User Image">
+<img src="{{ image }}" alt="User Image">
+
+{{ share.load() }}
+{{ share.create(title='Share with: ', sites='whatsapp') }}
+
+
+
+<!-- {{ share.create(title='Share with: ') }} -->
